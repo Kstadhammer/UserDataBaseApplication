@@ -160,12 +160,12 @@ public class MainMenu
 
     public void UpdateUser()
     {
-        // Your existing UpdateUser code
+        //update user code
     }
 
     public void DeleteUser()
     {
-        // Your existing DeleteUser code
+        // delete user code
     }
 
     public void DisplayAllUsers()
@@ -200,6 +200,6 @@ public class MainMenu
 
     public void SearchUser()
     {
-        // Your existing SearchUser code
+        //searchusercode
     }
 }

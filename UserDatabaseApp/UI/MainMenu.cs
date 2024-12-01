@@ -147,7 +147,9 @@ public class MainMenu
 
         string fullName = user.FirstName + " " + user.LastName;
 
-        ConsoleColor color = ConsoleColor.Green;
+        /* ConsoleColor color = ConsoleColor.Green; */
+
+
         Console.WriteLine($"{fullName} added successfully to the database!");
         Console.ResetColor();
 
@@ -171,7 +173,9 @@ public class MainMenu
     public void DisplayAllUsers()
     {
         Console.Clear();
-        Console.WriteLine("All users in the database:\n");
+        DateTime currentTime = DateTime.Now;
+        Console.WriteLine("All current users in the database:\n");
+        Console.WriteLine($"{currentTime}:\n");
         foreach (var user in _userService.GetAll())
         {
             Console.WriteLine(
@@ -195,6 +199,7 @@ public class MainMenu
 
     public void ReloadMenu()
     {
+        Console.Clear();
         UserMenu();
     }
 

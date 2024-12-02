@@ -197,7 +197,9 @@ public class MainMenu
 
         User? userToDelete = _userService
             .GetAll()
-            .FirstOrDefault(user => user.FirstName.Equals(userFirstName, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(user =>
+                user.FirstName.Equals(userFirstName, StringComparison.OrdinalIgnoreCase)
+            );
 
         if (userToDelete == null)
         {

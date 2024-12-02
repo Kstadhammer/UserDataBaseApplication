@@ -22,7 +22,7 @@ public class LoginMenu
         ██║     ██║   ██║██║  ███╗██║██╔██╗ ██║
         ██║     ██║   ██║██║   ██║██║██║╚██╗██║
         ███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║
-        ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝"
+        ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝���═╝  ╚═══╝"
         );
         Console.ResetColor();
         Console.WriteLine("\n");
@@ -32,11 +32,11 @@ public class LoginMenu
     {
         while (_loginAttempts < MaxLoginAttempts)
         {
-            string[] options = { "Login", "Exit" };
+            string[] options = { "Login", "Register", "Exit" };
             string username = "";
             string password = "";
             bool isInputting = true;
-            bool isUsername = true;
+            int fieldIndex = 0; // 0: username, 1: password, 2: buttons
 
             while (isInputting)
             {
@@ -46,16 +46,29 @@ public class LoginMenu
                 Console.WriteLine("Welcome to User Database Login");
                 Console.WriteLine("Use ↑↓ arrows to navigate and Enter to select:\n");
 
-                // Display credentials
-                Console.WriteLine($"Username: {(isUsername ? "_" : username)}");
-                Console.WriteLine(
-                    $"Password: {(isUsername ? "" : (password.Length > 0 ? new string('*', password.Length) : "_"))}\n"
-                );
+                // Display credentials with highlighting
+                Console.Write("Username: ");
+                if (fieldIndex == 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                }
+                Console.Write($"{(username.Length > 0 ? username : "_")}");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.Write("Password: ");
+                if (fieldIndex == 1)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                }
+                Console.Write($"{(password.Length > 0 ? new string('*', password.Length) : "_")}");
+                Console.ResetColor();
+                Console.WriteLine("\n");
 
                 // Display options
                 for (int i = 0; i < options.Length; i++)
                 {
-                    if (i == _selectedIndex)
+                    if (fieldIndex == 2 && i == _selectedIndex)
                     {
                         Console.BackgroundColor = ConsoleColor.Gray;
                         Console.ForegroundColor = ConsoleColor.Black;
@@ -74,54 +87,58 @@ public class LoginMenu
 
                 var key = Console.ReadKey(true);
 
-                if (isUsername || (!isUsername && _selectedIndex == 0))
+                switch (key.Key)
                 {
-                    if (key.Key == ConsoleKey.Enter)
-                    {
-                        if (isUsername)
+                    case ConsoleKey.UpArrow:
+                        if (fieldIndex == 2)
                         {
-                            isUsername = false;
-                        }
-                        else
-                        {
-                            isInputting = false;
-                        }
-                    }
-                    else if (
-                        key.Key == ConsoleKey.Backspace
-                        && (
-                            (isUsername && username.Length > 0)
-                            || (!isUsername && password.Length > 0)
-                        )
-                    )
-                    {
-                        if (isUsername)
-                            username = username[..^1];
-                        else
-                            password = password[..^1];
-                    }
-                    else if (key.KeyChar >= 32 && key.KeyChar <= 126) // Printable characters
-                    {
-                        if (isUsername)
-                            username += key.KeyChar;
-                        else
-                            password += key.KeyChar;
-                    }
-                }
-                else
-                {
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.UpArrow:
                             _selectedIndex = (_selectedIndex - 1 + options.Length) % options.Length;
-                            break;
-                        case ConsoleKey.DownArrow:
+                        }
+                        else
+                        {
+                            fieldIndex = (fieldIndex - 1 + 3) % 3;
+                        }
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        if (fieldIndex == 2)
+                        {
                             _selectedIndex = (_selectedIndex + 1) % options.Length;
-                            break;
-                        case ConsoleKey.Enter:
+                        }
+                        else
+                        {
+                            fieldIndex = (fieldIndex + 1) % 3;
+                        }
+                        break;
+
+                    case ConsoleKey.Enter:
+                        if (fieldIndex == 2)
+                        {
                             isInputting = false;
-                            break;
-                    }
+                        }
+                        else
+                        {
+                            // Move to next field when pressing Enter
+                            fieldIndex = (fieldIndex + 1) % 3;
+                        }
+                        break;
+
+                    case ConsoleKey.Backspace:
+                        if (fieldIndex == 0 && username.Length > 0)
+                            username = username[..^1];
+                        else if (fieldIndex == 1 && password.Length > 0)
+                            password = password[..^1];
+                        break;
+
+                    default:
+                        if (key.KeyChar >= 32 && key.KeyChar <= 126) // Printable characters
+                        {
+                            if (fieldIndex == 0)
+                                username += key.KeyChar;
+                            else if (fieldIndex == 1)
+                                password += key.KeyChar;
+                        }
+                        break;
                 }
             }
 

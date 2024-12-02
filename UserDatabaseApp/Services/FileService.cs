@@ -56,4 +56,23 @@ public class FileService
             return new List<User>();
         }
     }
+
+    public void DeleteUser(string id)
+    {
+        try
+        {
+            if (!File.Exists(_filePath))
+            {
+                return;
+            }
+
+            var list = LoadListFromFile();
+            list.RemoveAll(user => user.Id == id);
+            SaveListToFile(list);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+    }
 }

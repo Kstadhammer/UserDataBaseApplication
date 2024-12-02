@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using UserDatabaseApp.Models;
 
 namespace UserDatabaseApp.Interfaces
 {
-    public class IFileService
+    public interface IFileService
     {
-        
+        List<User> LoadListFromFile();
+        void SaveListToFile(List<User> users);
+        void DeleteUser(string id);
     }
 }

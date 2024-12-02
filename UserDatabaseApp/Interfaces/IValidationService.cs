@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using UserDatabaseApp.Models;
 
 namespace UserDatabaseApp.Interfaces
 {
-    public class IValidationService { }
+    public interface IValidationService
+    {
+        bool ValidateUser(User user);
+    }
 }

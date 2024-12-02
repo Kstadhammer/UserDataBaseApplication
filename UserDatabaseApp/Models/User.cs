@@ -5,6 +5,7 @@ namespace UserDatabaseApp.Models;
 
 public class User
 {
+    public string TimeCreated { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [Required(ErrorMessage = "First name is required")]

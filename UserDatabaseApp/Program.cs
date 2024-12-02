@@ -1,5 +1,8 @@
 ﻿using UserDatabaseApp.UI;
 
-var mainMenu = new MainMenu();
-
-mainMenu.UserMenu();
+var loginMenu = new LoginMenu();
+if (loginMenu.ShowLogin())
+{
+    var mainMenu = new MainMenu();
+    mainMenu.UserMenu();
+}

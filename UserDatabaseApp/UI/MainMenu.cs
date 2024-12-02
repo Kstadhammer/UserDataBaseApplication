@@ -1,4 +1,5 @@
 using UserDatabaseApp.Helpers;
+using UserDatabaseApp.Interfaces;
 using UserDatabaseApp.Models;
 using UserDatabaseApp.Services;
 
@@ -7,6 +8,7 @@ namespace UserDatabaseApp.UI;
 public class MainMenu
 {
     private readonly UserService _userService = new();
+    private readonly FileService _fileService = new();
     private int _selectedIndex = 0;
 
     // I got help from Claude Sonnet 3.5 To generate the Logo Method.
@@ -163,9 +165,6 @@ public class MainMenu
 
         string fullName = user.FirstName + " " + user.LastName;
 
-        /* ConsoleColor color = ConsoleColor.Green; */
-
-
         Console.WriteLine($"{fullName} added successfully to the database!");
         Console.ResetColor();
 
@@ -185,12 +184,35 @@ public class MainMenu
     {
         Console.Clear();
         Console.WriteLine("Enter the name of the user you want to delete: ");
-        string userFirstName = Console.ReadLine()!;
+        string? userFirstName = Console.ReadLine();
 
-        if (userFirstName == "")
+        if (string.IsNullOrEmpty(userFirstName))
+        {
+            Console.WriteLine("Invalid input. Name cannot be empty.");
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+            UserMenu();
+            return;
+        }
+
+        User? userToDelete = _userService
+            .GetAll()
+            .FirstOrDefault(user => user.FirstName.Equals(userFirstName, StringComparison.OrdinalIgnoreCase));
+
+        if (userToDelete == null)
         {
             Console.WriteLine("No user found with that name.");
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+            UserMenu();
+            return;
         }
+
+        _fileService.DeleteUser(userToDelete.Id);
+        Console.WriteLine("User deleted successfully.");
+        Console.WriteLine("\nPress any key to continue...");
+        Console.ReadKey();
+        UserMenu();
     }
 
     public void DisplayAllUsers()
@@ -203,6 +225,7 @@ public class MainMenu
         {
             Console.WriteLine(
                 $"""
+                Time Created: {user.TimeCreated}
                 Id: {user.Id}
                 First Name: {user.FirstName}
                 Last Name: {user.LastName}
@@ -220,8 +243,5 @@ public class MainMenu
         UserMenu();
     }
 
-    public void SearchUser()
-    {
-        //searchusercode
-    }
+    public void SearchUser() { }
 }

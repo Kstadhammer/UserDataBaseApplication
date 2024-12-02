@@ -54,7 +54,6 @@ public class MainMenu
             "4. Display all users",
             "5. Search for a user",
             "6. Exit",
-            "7. Reload the menu",
         };
 
         while (!exit)
@@ -107,9 +106,6 @@ public class MainMenu
                         case 5:
                             ExitApp();
                             break;
-                        case 7:
-                            ReloadMenu();
-                            break;
                         default:
                             Console.WriteLine("Invalid option. Please try again.");
                             break;
@@ -121,8 +117,28 @@ public class MainMenu
 
     public void ExitApp()
     {
-        Console.WriteLine("Exiting the application...");
-        Environment.Exit(0);
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("\n Are you sure you want to exit? (y/n)");
+        Console.WriteLine("Press any other key to return to the menu.");
+        string exitConfirmation = Console.ReadLine()!;
+        if (exitConfirmation == "y")
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\nThank you for using the User Database App!");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Saving and closing...");
+            Console.ResetColor();
+
+            Thread.Sleep(1500);
+            Environment.Exit(0);
+        }
+        else
+        {
+            UserMenu();
+        }
     }
 
     public void AddUser()
@@ -167,7 +183,14 @@ public class MainMenu
 
     public void DeleteUser()
     {
-        // delete user code
+        Console.Clear();
+        Console.WriteLine("Enter the name of the user you want to delete: ");
+        string userFirstName = Console.ReadLine()!;
+
+        if (userFirstName == "")
+        {
+            Console.WriteLine("No user found with that name.");
+        }
     }
 
     public void DisplayAllUsers()
@@ -194,12 +217,6 @@ public class MainMenu
         }
         Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
-        UserMenu();
-    }
-
-    public void ReloadMenu()
-    {
-        Console.Clear();
         UserMenu();
     }
 
